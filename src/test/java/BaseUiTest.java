@@ -5,7 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class BaseTests {
+public class BaseUiTest {
     protected WebDriver chromeDriver;
 
     @BeforeEach

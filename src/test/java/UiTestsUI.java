@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 
 
-public class TestsUI extends BaseTests{
+public class UiTestsUI extends BaseUiTest {
 
     @Test
     public void registrationCheckPO(){
