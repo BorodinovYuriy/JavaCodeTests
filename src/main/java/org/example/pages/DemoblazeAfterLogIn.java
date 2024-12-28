@@ -1,5 +1,5 @@
 package org.example.pages;
-
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,7 +32,6 @@ public class DemoblazeAfterLogIn extends BaseDemoblaze {
                 .collect(Collectors.toList());
     }
 
-
     public Map<String,String> getMainProductPrice() {
         String title = waitAndGetWebElement(firstProductLink).getText();
         String price = extractPrice(waitAndGetWebElement(firstProductPrice).getText());
@@ -43,5 +42,17 @@ public class DemoblazeAfterLogIn extends BaseDemoblaze {
     public void openFirstProductPage() {
         waitAndGetWebElement(firstProductLink).click();
     }
+    public DemoblazeAfterLogIn addProductAndValidatePrice(DemoblazeProduct product, String categoryXpath) {
+        clickElement(categoryXpath);
+        Map<String, String> mainPrice = getMainProductPrice();
+        String mainPriceValue = mainPrice.values().iterator().next();
 
+        openFirstProductPage();
+        Map<String, String> itemPrice = product.getProductInfo();
+        String itemPriceValue = itemPrice.values().iterator().next();
+
+        Assertions.assertEquals(mainPriceValue, itemPriceValue, "Цена не совпадает");
+        product.addToCart();
+        return this;
+    }
 }

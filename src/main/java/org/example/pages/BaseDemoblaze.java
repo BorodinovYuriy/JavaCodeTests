@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class BaseDemoblaze {
-
     protected WebDriver chromeDriver;
     protected WebDriverWait wait;
     protected Faker faker;
@@ -57,5 +55,10 @@ public class BaseDemoblaze {
             return matcher.group(0);
         }
         return "";
+    }
+    public BaseDemoblaze goHomeAndWait(DemoblazeBeforeLogIn beforeLogIn) {
+        clickHome();
+        beforeLogIn.waitConfirmLogin();
+        return this;
     }
 }

@@ -1,11 +1,9 @@
 package org.example.pages;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 
 public class DemoblazeBeforeLogIn extends BaseDemoblaze {
     private String username;
@@ -59,6 +57,12 @@ public class DemoblazeBeforeLogIn extends BaseDemoblaze {
     }
     public DemoblazeBeforeLogIn waitConfirmLogin(){
         waitAndGetWebElement(confirmLogin);
+        return this;
+    }
+    public DemoblazeBeforeLogIn performRegistrationAndLogin() {
+        openPage()
+                .singUp()
+                .logInAfterSingUp();
         return this;
     }
 }

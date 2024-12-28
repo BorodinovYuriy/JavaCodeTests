@@ -46,9 +46,10 @@ public class DemoblazeCart extends BaseDemoblaze {
         this.year = By.xpath("//input[@id='year']");
     }
 
-    private void waitForAllPricesLoaded() {
+    private DemoblazeCart waitForAllPricesLoaded() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(tableResponsive));
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(priseListPath));
+        return this;
     }
 
     public DemoblazeCart loadCartPage() {
@@ -57,10 +58,8 @@ public class DemoblazeCart extends BaseDemoblaze {
         return this;
     }
 
-    public void checkTotalPrise() {
-        waitForAllPricesLoaded();
-        try {
-            int expectedTotal = Integer.parseInt(waitAndGetWebElement(totalPrise).getText());
+    public DemoblazeCart checkTotalPrise() {
+        try {int expectedTotal = Integer.parseInt(waitAndGetWebElement(totalPrise).getText());
             List<WebElement> priceElements = getWebElements(priseListPath);
             int actualTotal = 0;
 
@@ -71,6 +70,7 @@ public class DemoblazeCart extends BaseDemoblaze {
         } catch (NumberFormatException e) {
             Assertions.fail("NumberFormatException при сравнивании цен в корзине" + e.getMessage());
         }
+        return this;
     }
 
     public DemoblazeCart makeOrder() {
@@ -99,6 +99,12 @@ public class DemoblazeCart extends BaseDemoblaze {
         if (orderDate != null) {
             Assertions.assertEquals(currentDate, orderDate, "Даты не совпадают!");
         }
+        return this;
+    }
+    public DemoblazeCart performOrder() {
+        loadCartPage()
+                .checkTotalPrise();
+        makeOrder();
         return this;
     }
 
