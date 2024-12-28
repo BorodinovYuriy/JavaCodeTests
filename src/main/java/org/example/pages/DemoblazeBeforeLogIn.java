@@ -3,11 +3,10 @@ package org.example.pages;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class DemoblazeBeforeLogIn extends BaseDemoblaze{
-
-    protected Faker faker;
 
     protected String username;
     protected String password;
@@ -24,7 +23,6 @@ public class DemoblazeBeforeLogIn extends BaseDemoblaze{
 
     public DemoblazeBeforeLogIn(WebDriver chromeDriver){
         super(chromeDriver);
-        this.faker = new Faker();
         this.username = faker.name().username();
         this.password = faker.internet().password();
         this.singUpButton = "//a[@id='signin2']/ancestor::li[@class='nav-item']";
@@ -56,8 +54,13 @@ public class DemoblazeBeforeLogIn extends BaseDemoblaze{
         getWebElementFromXpath(loginPassword).sendKeys(password);
         getWebElementFromXpath(loginConfirmButton).click();
         //Warn!  StaleElementReferenceException
-        waitAndGetWebElementFromXpath(confirmLogin);
+        waitConfirmLogin();
     }
 
-
+    public WebElement waitAndGetWebElementFromXpath(String xPath) {
+        return super.waitAndGetWebElementFromXpath(xPath);
+    }
+    public void waitConfirmLogin(){
+        waitAndGetWebElementFromXpath(confirmLogin);
+    }
 }

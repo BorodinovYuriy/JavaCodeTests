@@ -3,22 +3,25 @@ package org.example.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DemoblazeAfterLogIn extends DemoblazeBeforeLogIn {
+public class DemoblazeAfterLogIn extends BaseDemoblaze {
     String categoryAll;
-    String cardBlock;
+    String allCardBlocks;
 
     public DemoblazeAfterLogIn(WebDriver chromeDriver) {
         super(chromeDriver);
         super.baseUrl = "https://www.demoblaze.com/index.html";
         this.categoryAll = "//div[@class='list-group']";
-        this.cardBlock = "//div[@class ='card-block']";
+        this.allCardBlocks = "//div[@class ='card-block']";
+
     }
+//-------------------------------------------------------------------
 
     public List<String> getCategoryListXpath() {
         List<String>xpathList = new ArrayList<>();
@@ -36,17 +39,58 @@ public class DemoblazeAfterLogIn extends DemoblazeBeforeLogIn {
     }
 
 
-    public Map<String, String> addSomeItemToCart() {
+    public Map<String,String>  addSomeItemToCart() {
         Map<String,String> addedItems = new HashMap<>();
 
         List<String> category = getCategoryListXpath();
+        for(String xpath : category){
+            getWebElementFromXpath(xpath).click();
+            List<String> blocks = new ArrayList<>();
+            WebElement blocksDiv = waitAndGetWebElementFromXpath(allCardBlocks);
+            System.out.println(blocksDiv);
 
-       // WebElement allCardBlock = waitAndGetWebElementFromXpath();
-
-
-
+        }
         return null;
     }
+
+    public Map<String,String>  printSomeItem() {
+        Map<String,String> addedItems = new HashMap<>();
+
+        List<String> category = getCategoryListXpath();
+        for(String xpath : category){
+            getWebElementFromXpath(xpath).click();
+            List<WebElement> blocks = waitAndGetWebElementFromXpath(allCardBlocks)
+                    .findElements(By.xpath("./*"));
+
+            for (WebElement block : blocks) {
+                WebElement titleElement = waitAndGetWebElementFromXpath(".//h4/a");
+                WebElement priceElement = waitAndGetWebElementFromXpath(".//h5");
+
+                String title = titleElement.getText();
+                String price = priceElement.getText();
+                addedItems.put(title, price);
+            }
+        }
+        addedItems.forEach((key, value) -> System.out.println("Item: " + key + ", Price: " + value));
+
+        return addedItems;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
