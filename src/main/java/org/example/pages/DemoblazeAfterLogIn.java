@@ -3,105 +3,45 @@ package org.example.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DemoblazeAfterLogIn extends BaseDemoblaze {
-    String categoryAll;
-    String allCardBlocks;
+    private final By categoryAll;
+    private final By allCardBlocks;
+    private final By firstProductLink;
+    private final By firstProductPrice;
 
     public DemoblazeAfterLogIn(WebDriver chromeDriver) {
         super(chromeDriver);
-        super.baseUrl = "https://www.demoblaze.com/index.html";
-        this.categoryAll = "//div[@class='list-group']";
-        this.allCardBlocks = "//div[@class ='card-block']";
-
+        this.categoryAll = By.xpath("//div[@class='list-group']");
+        this.allCardBlocks = By.xpath("//div[@class ='card-block']");
+        this.firstProductLink = By.xpath("//div[@class ='card-block'][1]//h4/a");
+        this.firstProductPrice = By.xpath("//div[@class ='card-block'][1]//h5");
     }
-//-------------------------------------------------------------------
 
     public List<String> getCategoryListXpath() {
-        List<String>xpathList = new ArrayList<>();
-        WebElement categoriesDiv = waitAndGetWebElementFromXpath(categoryAll);
-        List<WebElement> categoryLinks = categoriesDiv.findElements(
-                By.xpath("./a[@id='itemc']"));
-        for (WebElement link : categoryLinks) {
-            xpathList.add(
-                    "//a[@id='itemc' and text() ='"
-                    +link.getText()
-                    +"']");
-        }
-        xpathList.forEach(System.out::println);
-        return xpathList;
+        return  getWebElements(categoryAll)
+                .stream()
+                .map(element -> element.findElements(By.xpath("./a[@id='itemc']")))
+                .flatMap(List::stream)
+                .map(webElement -> "//a[@id='itemc' and text() ='" + webElement.getText() + "']")
+                .collect(Collectors.toList());
     }
 
 
-    public Map<String,String>  addSomeItemToCart() {
-        Map<String,String> addedItems = new HashMap<>();
-
-        List<String> category = getCategoryListXpath();
-        for(String xpath : category){
-            getWebElementFromXpath(xpath).click();
-            List<String> blocks = new ArrayList<>();
-            WebElement blocksDiv = waitAndGetWebElementFromXpath(allCardBlocks);
-            System.out.println(blocksDiv);
-
-        }
-        return null;
+    public Map<String,String> getMainProductPrice() {
+        String title = waitAndGetWebElement(firstProductLink).getText();
+        String price = extractPrice(waitAndGetWebElement(firstProductPrice).getText());
+        Map<String,String> itemInfo = new HashMap<>();
+        itemInfo.put(title,price);
+        return itemInfo;
     }
-
-    public Map<String,String>  printSomeItem() {
-        Map<String,String> addedItems = new HashMap<>();
-
-        List<String> category = getCategoryListXpath();
-        for(String xpath : category){
-            getWebElementFromXpath(xpath).click();
-            List<WebElement> blocks = waitAndGetWebElementFromXpath(allCardBlocks)
-                    .findElements(By.xpath("./*"));
-
-            for (WebElement block : blocks) {
-                WebElement titleElement = waitAndGetWebElementFromXpath(".//h4/a");
-                WebElement priceElement = waitAndGetWebElementFromXpath(".//h5");
-
-                String title = titleElement.getText();
-                String price = priceElement.getText();
-                addedItems.put(title, price);
-            }
-        }
-        addedItems.forEach((key, value) -> System.out.println("Item: " + key + ", Price: " + value));
-
-        return addedItems;
+    public void openFirstProductPage() {
+        waitAndGetWebElement(firstProductLink).click();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
