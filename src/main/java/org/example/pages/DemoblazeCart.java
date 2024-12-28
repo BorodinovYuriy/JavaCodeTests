@@ -51,13 +51,11 @@ public class DemoblazeCart extends BaseDemoblaze {
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(priseListPath));
         return this;
     }
-
     public DemoblazeCart loadCartPage() {
         getWebElement(cartButton).click();
         waitForAllPricesLoaded();
         return this;
     }
-
     public DemoblazeCart checkTotalPrise() {
         try {int expectedTotal = Integer.parseInt(waitAndGetWebElement(totalPrise).getText());
             List<WebElement> priceElements = getWebElements(priseListPath);
@@ -72,7 +70,6 @@ public class DemoblazeCart extends BaseDemoblaze {
         }
         return this;
     }
-
     public DemoblazeCart makeOrder() {
         getWebElement(placeOrderButton).click();
         waitAndGetWebElement(name).sendKeys(faker.name().name());
@@ -107,7 +104,6 @@ public class DemoblazeCart extends BaseDemoblaze {
         makeOrder();
         return this;
     }
-
     private LocalDate parseDateFromString(String dateString) {
         try {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

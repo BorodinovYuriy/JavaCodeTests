@@ -10,17 +10,13 @@ import java.util.Map;
 
 public class DemoblazeProduct extends BaseDemoblaze {
     private final By addToCartButton;
-    private final By prodInfo;
     private final By productTitle;
     private final By productPrice;
 
     public DemoblazeProduct(WebDriver chromeDriver) {
         super(chromeDriver);
         this.addToCartButton = By.xpath("//a[text()='Add to cart']");
-        this.prodInfo = By.xpath("//div[@id='tbodyid']");
-        // Исправленный локатор: используем только //h2, так как  //div[@id='tbodyid'] уже включен в prodInfo
         this.productTitle = By.xpath( "//h2[@class='name']");
-        // Исправленный локатор: используем только //h3, так как  //div[@id='tbodyid'] уже включен в prodInfo
         this.productPrice = By.xpath("//h3[@class='price-container']");
     }
 

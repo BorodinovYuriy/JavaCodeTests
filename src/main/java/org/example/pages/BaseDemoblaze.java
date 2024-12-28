@@ -28,7 +28,6 @@ public class BaseDemoblaze {
         chromeDriver.get(baseUrl);
         return this;
     }
-
     public WebElement waitAndGetWebElement(By locator){
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
@@ -38,15 +37,12 @@ public class BaseDemoblaze {
     public WebElement getWebElement(By locator){
         return chromeDriver.findElement(locator);
     }
-
     public void clickElement(String xPath){
         waitAndGetWebElement(By.xpath(xPath)).click();
     }
-
     public void clickHome(){
         waitAndGetWebElement(home).click();
     }
-
     public String extractPrice(String priceText) {
         String regex = "\\$\\d+";
         Pattern pattern = Pattern.compile(regex);
